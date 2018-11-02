@@ -42,40 +42,6 @@ int* nextGeneration(int tab[], int rule, int size) {
 		tmp_char = binRule[left * 4 + current * 2 + right * 1];
 		if (tmp_char == '0') newTab[i] = 0;
 		else newTab[i] = 1;
-
-
-		//if (left == 1 && current == 1 && right == 1) {
-		//	if (binRule[0] == '1') tab[i] = 1;
-		//	else tab[i] = 0;
-		//}
-		//if (left == 1 && current == 1 && right == 0) {
-		//	if (binRule[1] == '1') tab[i] = 1;
-		//	else tab[i] = 0;
-		//}
-		//if (left == 1 && current == 0 && right == 1) {
-		//	if (binRule[2] == '1') tab[i] = 1;
-		//	else tab[i] = 0;
-		//}
-		//if (left == 1 && current == 0 && right == 0) {
-		//	if (binRule[3] == '1') tab[i] = 1;
-		//	else tab[i] = 0;
-		//}
-		//if (left == 0 && current == 1 && right == 1) {
-		//	if (binRule[4] == '1') tab[i] = 1;
-		//	else tab[i] = 0;
-		//}
-		//if (left == 0 && current == 1 && right == 0) {
-		//	if (binRule[5] == '1') tab[i] = 1;
-		//	else tab[i] = 0;
-		//}
-		//if (left == 0 && current == 0 && right == 1) {
-		//	if (binRule[6] == '1') tab[i] = 1;
-		//	else tab[i] = 0;
-		//}
-		//if (left == 0 && current == 0 && right == 0) {
-		//	if (binRule[7] == '1') tab[i] = 1;
-		//	else tab[i] = 0;
-		//}
 	}
 	return newTab;
 }
@@ -91,7 +57,7 @@ int main()
 	int *tmp_tab;
 	int row[width] = { 0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0 };
 
-	std::cout << "RULE: " << toBinary(rule) << std::endl;
+	std::cout << "RULE: " << toBinary(rule) << " " << rule << std::endl;
 
 	for (int i = 0; i < numberOfGenerations; i++) {
 		for (int j = 0; j < width; j++) {
