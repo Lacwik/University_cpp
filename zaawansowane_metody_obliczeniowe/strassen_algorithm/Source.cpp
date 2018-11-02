@@ -36,41 +36,6 @@ float **allocateAndFillMatrix(int matrixSize) {
 	return matrix;
 }
 
-void multiply(float **firstMatrix, float **secondMatrix, float **resultMatrix, int matrixSize)
-{
-	int i, j, k;
-	int numberOfMultiplifications = 0;
-
-	//thirdMatrix inicjalization
-	for (i = 0; i < matrixSize; ++i) {
-		for (j = 0; j < matrixSize; ++j) {
-			resultMatrix[i][j] = 0;
-		}
-	}
-
-	//multiplification
-	for (i = 0; i < matrixSize; ++i) {
-		for (j = 0; j < matrixSize; ++j) {
-			for (k = 0; k < matrixSize; ++k) {
-				resultMatrix[i][j] += firstMatrix[i][k] * secondMatrix[k][j];
-				numberOfMultiplifications++;
-			}
-		}
-	}
-
-	std::cout << "N: " << numberOfMultiplifications << std::endl;
-}
-
-void display(float **matrix, int matrixSize) {
-	for (int i = 0; i < matrixSize; ++i) {
-		for (int j = 0; j < matrixSize; ++j) {
-			std::cout << matrix[i][j] << " ";
-			if (j == matrixSize - 1)
-				std::cout << std::endl << std::endl;
-		}
-	}
-}
-
 void sum(float **firstMatrix, float **secondMatrix, float **resultMatrix, int matrixSize) {
 
 	for (int i = 0; i < matrixSize; i++) {
@@ -96,28 +61,6 @@ void deleteAllocatedMatrixSpace(float **matrix, int matrixSize) {
 	}
 	//deleting main array
 	delete[] matrix;
-}
-
-void count(int matrixSize) {
-	float** firstMatrix = new float*[matrixSize];
-	for (int i = 0; i < matrixSize; i++) {
-		firstMatrix[i] = new float[matrixSize];
-	}
-	float** secondMatrix = new float*[matrixSize];
-	for (int i = 0; i < matrixSize; i++) {
-		secondMatrix[i] = new float[matrixSize];
-	}
-	float** thirdMatrix = new float*[matrixSize];
-	for (int i = 0; i < matrixSize; i++) {
-		thirdMatrix[i] = new float[matrixSize];
-	}
-
-	fillMatrixes(firstMatrix, secondMatrix, matrixSize);
-	multiply(firstMatrix, secondMatrix, thirdMatrix, matrixSize);
-
-	deleteAllocatedMatrixSpace(firstMatrix, matrixSize);
-	deleteAllocatedMatrixSpace(secondMatrix, matrixSize);
-	deleteAllocatedMatrixSpace(thirdMatrix, matrixSize);
 }
 
 void strassen(float **firstMatrix, float **secondMatrix, float **resultMatrix, int matrixSize, int &multiplificationCounter) {
@@ -271,55 +214,6 @@ void zad2(int matrixSize) {
 	deleteAllocatedMatrixSpace(firstMatrix, matrixSize);
 	deleteAllocatedMatrixSpace(secondMatrix, matrixSize);
 	deleteAllocatedMatrixSpace(thirdMatrix, matrixSize);
-
-}
-
-
-float** cholesky(float** matrix, int matrix_N, int matrix_M) {
-	float** resultMatrix = new float*[matrix_N];
-	for (int i = 0; i < matrix_N; i++) {
-		resultMatrix[i] = new float[matrix_M];
-	}
-	float** secondMatrix = new float*[matrix_N];
-	for (int i = 0; i < matrix_N; i++) {
-		secondMatrix[i] = new float[matrix_M];
-	}
-
-	for (int i = 0; i < matrix_N; i++) {
-		for (int j = 0; j < matrix_M; j++) {
-			resultMatrix[i][j] = 0;
-			secondMatrix[i][j] = 0;
-		}
-	}
-
-	float sum1 = 0;
-	float sum2 = 0;
-
-
-	for (int i = 0; i < matrix_N; i++) {
-		for (int j = 0; j < matrix_M; j++) {
-			if (i == j) {
-				for (int k = 0; k < i - 1; k++) {
-					sum1 = sum1 + resultMatrix[i][k] * resultMatrix[i][k];
-				}
-				resultMatrix[i][j] = sqrt((matrix[i][j] - sum1));
-			}
-			else {
-				for (int k = 0; k < i - 1; k++) {
-					sum2 = sum2 + resultMatrix[j][k] * resultMatrix[i][k];
-				}
-				resultMatrix[i][j] = (matrix[i][j] - sum2) / resultMatrix[i][i];
-			}
-		}
-	}
-
-	for (int i = 0; i < matrix_N; i++) {
-		for (int j = 0; j < matrix_M; j++) {
-			std::cout << resultMatrix[i][j] << " ";
-		}
-		std::cout << std::endl;
-	}
-	return resultMatrix;
 }
 
 //=====================================================================================
@@ -328,48 +222,22 @@ int main() {
 	srand(time(NULL));
 	int matrixSize = 2;
 
-	//matrixSize = 10;
-	//count(matrixSize);
-	//matrixSize = 20;
-	//count(matrixSize);
-	//matrixSize = 50;
-	//count(matrixSize);
-	//matrixSize = 100;
-	//count(matrixSize);
-	//matrixSize = 200;
-	//count(matrixSize);
-	//matrixSize = 500;
-	//count(matrixSize);
-	//matrixSize = 1000;
-	//count(matrixSize);
-
-	//matrixSize = 2;
-	//zad2(matrixSize);
-	//matrixSize = 8;
-	//zad2(matrixSize);
-	//matrixSize = 16;
-	//zad2(matrixSize);
-	//matrixSize = 64;
-	//zad2(matrixSize);
-	//matrixSize = 128;
-	//zad2(matrixSize);
-	//matrixSize = 256;
-	//zad2(matrixSize);
-	//matrixSize = 512;
-	//zad2(matrixSize);
-	//matrixSize = 1024;
-	//zad2(matrixSize);
-
-	float** tmpMatrix = new float*[2];
-	for (int i = 0; i < 2; i++) {
-		tmpMatrix[i] = new float[2];
-	}
-	tmpMatrix[0][0] = 4;
-	tmpMatrix[0][1] = 1;
-	tmpMatrix[1][0] = 1;
-	tmpMatrix[1][1] = 2;
-
-	cholesky(tmpMatrix, 2, 2);
+	matrixSize = 2;
+	zad2(matrixSize);
+	matrixSize = 8;
+	zad2(matrixSize);
+	matrixSize = 16;
+	zad2(matrixSize);
+	matrixSize = 64;
+	zad2(matrixSize);
+	matrixSize = 128;
+	zad2(matrixSize);
+	matrixSize = 256;
+	zad2(matrixSize);
+	matrixSize = 512;
+	zad2(matrixSize);
+	matrixSize = 1024;
+	zad2(matrixSize);
 
 
 	system("PAUSE");
