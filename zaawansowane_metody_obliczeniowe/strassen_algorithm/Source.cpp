@@ -191,7 +191,7 @@ void strassen(float **firstMatrix, float **secondMatrix, float **resultMatrix, i
 	deleteAllocatedMatrixSpace(secondMatrix_result, newMatrixSize);
 }
 
-void zad2(int matrixSize) {
+void strassen_execute(int matrixSize) {
 	float** firstMatrix = new float*[matrixSize];
 	for (int i = 0; i < matrixSize; i++) {
 		firstMatrix[i] = new float[matrixSize];
@@ -223,21 +223,21 @@ int main() {
 	int matrixSize = 2;
 
 	matrixSize = 2;
-	zad2(matrixSize);
+	strassen_execute(matrixSize);
 	matrixSize = 8;
-	zad2(matrixSize);
+	strassen_execute(matrixSize);
 	matrixSize = 16;
-	zad2(matrixSize);
+	strassen_execute(matrixSize);
 	matrixSize = 64;
-	zad2(matrixSize);
+	strassen_execute(matrixSize);
 	matrixSize = 128;
-	zad2(matrixSize);
+	strassen_execute(matrixSize);
 	matrixSize = 256;
-	zad2(matrixSize);
+	strassen_execute(matrixSize);
 	matrixSize = 512;
-	zad2(matrixSize);
+	strassen_execute(matrixSize);
 	matrixSize = 1024;
-	zad2(matrixSize);
+	strassen_execute(matrixSize);
 
 
 	system("PAUSE");
