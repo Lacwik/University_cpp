@@ -1,71 +1,68 @@
 #include <iostream>
-#include <ctime>
 
-
-float** cholesky(float** matrix, int matrix_N, int matrix_M) {
-	float** resultMatrix = new float*[matrix_N];
-	for (int i = 0; i < matrix_N; i++) {
-		resultMatrix[i] = new float[matrix_M];
-	}
-	float** secondMatrix = new float*[matrix_N];
-	for (int i = 0; i < matrix_N; i++) {
-		secondMatrix[i] = new float[matrix_M];
-	}
-
-	for (int i = 0; i < matrix_N; i++) {
-		for (int j = 0; j < matrix_M; j++) {
-			resultMatrix[i][j] = 0;
-			secondMatrix[i][j] = 0;
-		}
-	}
-
-	float sum1 = 0;
-	float sum2 = 0;
-
-
-	for (int i = 0; i < matrix_N; i++) {
-		for (int j = 0; j < matrix_M; j++) {
-			if (i == j) {
-				for (int k = 0; k < i - 1; k++) {
-					sum1 = sum1 + resultMatrix[i][k] * resultMatrix[i][k];
-				}
-				resultMatrix[i][j] = sqrt((matrix[i][j] - sum1));
-			}
-			else {
-				for (int k = 0; k < i - 1; k++) {
-					sum2 = sum2 + resultMatrix[j][k] * resultMatrix[i][k];
-				}
-				resultMatrix[i][j] = (matrix[i][j] - sum2) / resultMatrix[i][i];
-			}
-		}
-	}
-
-	for (int i = 0; i < matrix_N; i++) {
-		for (int j = 0; j < matrix_M; j++) {
-			std::cout << resultMatrix[i][j] << " ";
+void printMatrix(float** matrix, int rows, int cols) {
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			std::cout << matrix[i][j] << " ";
 		}
 		std::cout << std::endl;
 	}
-	return resultMatrix;
+}
+
+void cholesky(float** matrix, int rows, int cols) {
+	float** resultMatrix = new float*[rows];
+	for (int i = 0; i < rows; i++) {
+		resultMatrix[i] = new float[cols];
+	}
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			resultMatrix[i][j] = 0.0;
+		}
+	}
+	
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j <= i; j++) {
+			float sum = 0.0;
+			if (j == i){
+				for (int k = 0; k < j; k++) {
+					sum = sum + pow(resultMatrix[j][k], 2)*1.0;
+				}
+				resultMatrix[j][j] = sqrt(matrix[j][j] - sum)*1.0;
+			}
+			else {
+				for (int k = 0; k < j; k++) {
+					sum = sum + (resultMatrix[i][k] * resultMatrix[j][k]);
+				}
+				resultMatrix[i][j] = 1.0*((matrix[i][j] - sum) / resultMatrix[j][j]);
+			}
+		}
+	}
+	printMatrix(resultMatrix, rows, cols);
 }
 
 //=====================================================================================
 int main() {
 
-	srand(time(NULL));
-	int matrixSize = 2;
+	int rows = 3;
+	int cols = 3;
 
-	float** tmpMatrix = new float*[2];
-	for (int i = 0; i < 2; i++) {
-		tmpMatrix[i] = new float[2];
+	float** tmpMatrix = new float*[rows];
+	for (int i = 0; i < rows; i++) {
+		tmpMatrix[i] = new float[cols];
 	}
 	tmpMatrix[0][0] = 4;
-	tmpMatrix[0][1] = 1;
-	tmpMatrix[1][0] = 1;
-	tmpMatrix[1][1] = 2;
+	tmpMatrix[0][1] = 12;
+	tmpMatrix[0][2] = -16;
 
-	cholesky(tmpMatrix, 2, 2);
+	tmpMatrix[1][0] = 12;
+	tmpMatrix[1][1] = 37;
+	tmpMatrix[1][2] = -43;
 
+	tmpMatrix[2][0] = -16;
+	tmpMatrix[2][1] = -43;
+	tmpMatrix[2][2] = 98;
+
+	cholesky(tmpMatrix, rows, cols);
 
 	system("PAUSE");
 	return 0;
