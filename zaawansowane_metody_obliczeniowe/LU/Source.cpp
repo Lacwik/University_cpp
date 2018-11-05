@@ -33,7 +33,7 @@ void lu_decomposition(float** matrix_A, int rows, int cols) {
 
 	for (int i = 0; i < rows; i++) {
 			for (int k = i; k < rows; k++) {
-				int sum = 0;
+				float sum = 0.0;
 				for (int j = 0; j < i; j++) {
 					sum += (matrix_L[i][j] * matrix_U[j][k]);
 				}
@@ -41,10 +41,10 @@ void lu_decomposition(float** matrix_A, int rows, int cols) {
 			}
 			for (int k = i; k < cols; k++) {
 				if (i == k) {
-					matrix_L[i][i] = 1;
+					matrix_L[i][i] = 1.0;
 				}
 				else {
-					int sum = 0;
+					float sum = 0.0;
 					for (int j = 0; j < i; j++) {
 						sum += (matrix_L[k][j] * matrix_U[j][i]);
 					}
