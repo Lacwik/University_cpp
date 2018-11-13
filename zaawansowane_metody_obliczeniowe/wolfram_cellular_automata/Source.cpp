@@ -85,7 +85,7 @@ float standard_deviation(int m[], float avg, int size, int delta) {
 
 int main()
 {
-	int rule = 90;
+	int rule = 69;
 	int numberOfGenerations = 50;
 	const int width = 80;
 	int *tmp_tab;
