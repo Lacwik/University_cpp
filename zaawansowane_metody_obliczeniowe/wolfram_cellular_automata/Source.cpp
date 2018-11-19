@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cstdio>
 #include <string>
+#include <vector>
+
+const int width = 80;
 
 int hamming_distance(int next[], int prev[], int size) {
 	int distance = 0;
@@ -77,57 +80,122 @@ float standard_deviation(int m[], float avg, int size, int delta) {
 	for (int i = 0; i < size; i++) {
 		sumDOWN += (m[i] - avg)*(m[i] - avg);
 	}
-	result = sumUP / sumDOWN;
+	if (sumUP == 0) result = 0;
+	else result = sumUP / sumDOWN;
+	if (result < 0) result = abs(result);
 	return result;
+}
+void start(int rule, int generations, int start_row[], bool draw) {
+	int row[width];
+	int h_distance;
+	int m_avg;
+	int *tmp_tab;
+	float deviation;
+	int *h_distances = new int[generations];
+	int *gen_spins = new int[generations];
+	std::vector<int*> rows_vector;
+
+
+	for (int i = 0; i < width; i++) {
+		row[i] = start_row[i];
+	}
+
+	int m_sum = 0;
+	rows_vector.push_back(row);
+	for (int i = 0; i < generations; i++) {
+		for (int j = 0; j < width; j++) {
+			if (draw) {
+				if (row[j] == 1) std::cout << (char)(219);
+				else std::cout << " ";
+			}
+		}
+
+		tmp_tab = nextGeneration(row, rule, width);
+		rows_vector.push_back(tmp_tab);
+
+		gen_spins[i] = count_m_spins(tmp_tab, width);
+		m_sum += gen_spins[i];
+
+		if (tmp_tab != NULL && draw) {
+			h_distance = hamming_distance(tmp_tab, row, width);
+			std::cout << "           H: " << h_distance;
+			h_distances[i] = h_distance;
+
+			std::cout << std::endl;
+		}
+		for (int x = 0; x < width; x++) {
+			row[x] = tmp_tab[x];
+		}
+	}
+	m_avg = m_sum / generations;
+	if (draw) {
+		std::cout << "m average: " << m_avg << std::endl;
+		deviation = standard_deviation(gen_spins, m_avg, generations, 1);
+		std::cout << "deviation 1, delta=1  | " << deviation << std::endl;
+		deviation = standard_deviation(gen_spins, m_avg, generations, 2);
+		std::cout << "deviation 2, delta=2  | " << deviation << std::endl;
+		deviation = standard_deviation(gen_spins, m_avg, generations, 3);
+		std::cout << "deviation 3, delta=3  | " << deviation << std::endl;
+		deviation = standard_deviation(gen_spins, m_avg, generations, 4);
+		std::cout << "deviation 4, delta=4  | " << deviation << std::endl;
+	}
+
+	int m_tmp[5] = { 1, 3, 5, 7, 9 };
+	float m_tmp_avg = 5;
+	if (draw) {
+		std::cout << "Hdistance 1:2 |    " << hamming_distance(rows_vector[2], rows_vector[1], width) << std::endl;
+		std::cout << "Hdistance 2:4 |    " << hamming_distance(rows_vector[4], rows_vector[2], width) << std::endl;
+		std::cout << "Hdistance 3:6 |    " << hamming_distance(rows_vector[6], rows_vector[3], width) << std::endl;
+		std::cout << std::endl << std::endl;
+	}
+
+	delete h_distances;
+	delete gen_spins;
 }
 
 
 
 int main()
 {
-	int rule = 69;
-	int numberOfGenerations = 50;
-	const int width = 80;
-	int *tmp_tab;
+	int numberOfGenerations = 20;
+
 	int row[width] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-	int h_distance;
-	int m_avg;
-	float deviation;
-	int *h_distances = new int[numberOfGenerations];
-	int *gen_spins = new int[numberOfGenerations];
+	int row_2[width] = { 1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1 };
 
-	std::cout << "RULE: " << toBinary(rule) << " " << rule << std::endl;
+	bool standard = true; // examples with single point active
+	bool advance = false; // emaples with many active points at start
 
-	int m_sum = 0;
-	for (int i = 0; i < numberOfGenerations; i++) {
-		for (int j = 0; j < width; j++) {
-			if (row[j] == 1) std::cout << (char)(219);
-			else std::cout << " ";
-		}
+	std::cout << "=================== RULE: " << toBinary(60) << " | 60" << std::endl << std::endl;
+	start(60, numberOfGenerations, row, standard);
+	start(60, numberOfGenerations, row_2, advance);
+	std::cout << "=================== RULE: " << toBinary(61) << " | 61" << std::endl << std::endl;
+	start(61, numberOfGenerations, row, standard);
+	start(61, numberOfGenerations, row_2, advance);
+	std::cout << "=================== RULE: " << toBinary(62) << " | 62" << std::endl << std::endl;
+	start(62, numberOfGenerations, row, standard);
+	start(62, numberOfGenerations, row_2, advance);
+	std::cout << "=================== RULE: " << toBinary(63) << " | 63 " << std::endl << std::endl;
+	start(63, numberOfGenerations, row, standard);
+	start(63, numberOfGenerations, row_2, advance);
+	std::cout << "=================== RULE: " << toBinary(64) << " | 64 " << std::endl << std::endl;
+	start(64, numberOfGenerations, row, standard);
+	start(64, numberOfGenerations, row_2, advance);
+	std::cout << "=================== RULE: " << toBinary(65) << " | 65 " << std::endl << std::endl;
+	start(65, numberOfGenerations, row, standard);
+	start(65, numberOfGenerations, row_2, advance);
+	std::cout << "=================== RULE: " << toBinary(66) << " | 66 " << std::endl << std::endl;
+	start(66, numberOfGenerations, row, standard);
+	start(66, numberOfGenerations, row_2, advance);
+	std::cout << "=================== RULE: " << toBinary(67) << " | 67 " << std::endl << std::endl;
+	start(67, numberOfGenerations, row, standard);
+	start(67, numberOfGenerations, row_2, advance);
+	std::cout << "=================== RULE: " << toBinary(68) << " | 68 " << std::endl << std::endl;
+	start(68, numberOfGenerations, row, standard);
+	start(68, numberOfGenerations, row_2, advance);
+	std::cout << "=================== RULE: " << toBinary(69) << " | 69 " << std::endl << std::endl;
+	start(69, numberOfGenerations, row, standard);
+	start(69, numberOfGenerations, row_2, advance);
 
-		tmp_tab = nextGeneration(row, rule, width);
-
-		gen_spins[i] = count_m_spins(tmp_tab, width);
-		m_sum += gen_spins[i];
-
-		if (tmp_tab != NULL) {
-			h_distance = hamming_distance(tmp_tab, row, width);
-			std::cout << "           H: " << h_distance;
-			h_distances[i] = h_distance;
-		}
-		std::cout << std::endl;
-		for (int x = 0; x < width; x++) {
-			row[x] = tmp_tab[x];
-		}
-	}
-	m_avg = m_sum / numberOfGenerations;
-	deviation = standard_deviation(gen_spins, m_avg, numberOfGenerations, 1);
-	std::cout << "m average: " << m_avg << std::endl;
-	std::cout << "deviation: " << deviation << std::endl;
-
-	int m_tmp[5] = { 1, 3, 5, 7, 9 };
-	float m_tmp_avg = 5;
-	std::cout << "deviation TEMP: " << standard_deviation(m_tmp, m_tmp_avg, 5, 1) << std::endl;
 	system("PAUSE");
 	return 0;
 }
